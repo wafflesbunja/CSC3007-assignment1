@@ -1,0 +1,11 @@
+body {
+    background-image: url("https://www.momondo.com/discover/wp-content/uploads/sites/260/2019/04/119a0ce5-bf97-3674-9c1d-03addd0c1a86.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.container{
+    background-color: whitesmoke;
+    opacity: 0.95;
+}
