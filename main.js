@@ -3,7 +3,6 @@ fetch("https://api.data.gov.sg/v1/environment/psi").then((d)=>{
 }).then((data)=>{
     var temp = [];
     readings = data.items[0].readings
-    timestamp = new Date(data.items[0].update_timestamp).toLocaleString()
     for (const key in readings) {
       temp.push({
             metric: key,
@@ -15,6 +14,7 @@ fetch("https://api.data.gov.sg/v1/environment/psi").then((d)=>{
             south: readings[key].south,
         })
     }
+    timestamp = new Date(data.items[0].update_timestamp).toLocaleString()
     $("#timeStamp").text("Last updated: " + timestamp);
     $("#carparkTable").show();
     $("#carparkTable").DataTable({
