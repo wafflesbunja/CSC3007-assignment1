@@ -1,37 +1,34 @@
-$(document).ready(function() {
-    var array = [];
-    var object = $("#carparkTable").DataTable();
-    var regions = ["west", "national", "east", "central", "south", "north"];
-    $.get("https://api.data.gov.sg/v1/environment/psi", function(data) {
-      var count = 0;
-      for (i in data["items"][0]["readings"]) {
-        if (count == 0) {
-          for (r in regions) {
-            temp = [];
-            temp.push(regions[r])
-            temp.push(data["items"][0]["readings"][i][regions[r]]);
-            array.push(temp);
-            // console.log(array)
-          }
-          count += 1;
-        } 
-        else {
-          for (r in regions) {
-            array[regionsSort(regions[r])].push(data["items"][0]["readings"][i][regions[r]]);
-          }
-        }
-      } for (j in array) {object.row.add(array[j]).draw(false);}
-    });
-  });
-  
-  function regionsSort(rName) {
-    switch (rName) {
-      case "west": return 0;
-      case "national": return 1;
-      case "east": return 2;
-      case "central": return 3;
-      case "south": return 4;
-      case "north": return 5;
-      default: return 0;
+fetch("https://api.data.gov.sg/v1/environment/psi").then((d)=>{
+    return d.json();
+}).then((data)=>{
+    var temp = [];
+    readings = data.items[0].readings
+    timestamp = new Date(data.items[0].update_timestamp).toLocaleString()
+    for (const key in readings) {
+      temp.push({
+            metric: key,
+            national: readings[key].national,
+            central: readings[key].central,
+            west: readings[key].west,
+            east: readings[key].east,
+            north: readings[key].north,
+            south: readings[key].south,
+        })
     }
-  }
+    $("#timeStamp").text("Last updated: " + timestamp);
+    $("#carparkTable").show();
+    $("#carparkTable").DataTable({
+        data: temp,
+        columns: [
+            { data: 'metric' },
+            { data: 'national' },
+            { data: 'central' },
+            { data: 'west' },
+            { data: 'east' },
+            { data: 'north' },
+            { data: 'south' }
+        ],
+        lengthMenu:  [10, 20, 30, 50]
+    });
+});
+
